@@ -1,14 +1,59 @@
 import React, { Component } from 'react';
 import ProductList from './../../components/ProductList/ProductList'
 import ProductItem from './../../components/ProductItem/ProductItem'
+import {Link} from 'react-router-dom'
+import { connect } from 'react-redux'
+import callApi from './../../utils/apiCaller'
+import {actFetchProducts} from './../../actions/index'
+
+
 
 class ProductListPage extends Component {
+
+    constructor(props){
+        super(props)
+        this.state={
+            products:[]
+        }
+    }
+
+    componentDidMount(){
+        callApi('products', 'GET', null).then(res=>{
+            this.props.fetchAllProducts(res.data)
+        })
+    }
+
+    onDelete=(id)=>{
+        var {products} = this.state
+        callApi(`products/${id}`, 'DELETE', null).then(res=>{
+            let index=this.findIndex(products,id)
+            if(res.status===200){ //OK
+                if(index!==1){
+                    products.splice(index, 1)
+                    this.setState({
+                        products:products
+                    })
+                }
+            }
+        })
+    }
+
+    findIndex = (products, id) => {
+        let result = -1
+        products.forEach((products, index)=>{
+            if(products.id === id){
+                result=index
+            }
+        })
+        return result
+    }
+
     render() {
-        let products=[]
+        let {products} = this.props
 
         return (
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <button type="button" className="btn btn-info mb-10">Thêm sản phẩm</button>
+                <Link to="/product/add" className="btn btn-info mb-10">Thêm sản phẩm</Link>
                 <ProductList>
                     {this.showProducts(products)}
                 </ProductList>
@@ -16,15 +61,16 @@ class ProductListPage extends Component {
         );
     }
 
-    showProducts(products){
+    showProducts(products) {
         let result = null
-        if(products.length>0){
-            result=products.map((product,index)=>{
+        if (products.length > 0) {
+            result = products.map((product, index) => {
                 return (
                     <ProductItem
                         key={index}
                         product={product}
                         index={index}
+                        onDelete={this.onDelete}
                     />
                 )
             })
@@ -33,4 +79,18 @@ class ProductListPage extends Component {
     }
 }
 
-export default ProductListPage;
+const mapStateToProps = state => {
+    return {
+        products: state.products
+    }
+}
+
+const mapDispatchToProps=(dispatch, props) =>{
+    return {
+        fetchAllProducts: (products)=>{
+            dispatch(actFetchProducts(products))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage);
