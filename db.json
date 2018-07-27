@@ -7,10 +7,16 @@
       "status": true
     },
     {
-      "id": 3,
-      "name": "Oppo F1s",
-      "price": 500,
-      "status": false
+      "name": "a",
+      "price": "1",
+      "status": "",
+      "id": 3
+    },
+    {
+      "name": "b",
+      "price": "2",
+      "status": "",
+      "id": 4
     }
   ]
 }
