@@ -1,22 +1,28 @@
 {
   "products": [
     {
-      "id": 2,
-      "name": "Samsung galaxy S9",
-      "price": 500,
+      "id": 5,
+      "name": "Samsung S9",
+      "price": "820",
       "status": true
     },
     {
-      "name": "a",
-      "price": "1",
-      "status": "",
-      "id": 3
+      "id": 6,
+      "name": "IPhoneX",
+      "price": "500",
+      "status": true
     },
     {
-      "name": "b",
-      "price": "2",
-      "status": "",
-      "id": 4
+      "id": 7,
+      "name": "Samsung S9",
+      "price": "500",
+      "status": false
+    },
+    {
+      "id": 8,
+      "name": "Samsung S9",
+      "price": "500",
+      "status": ""
     }
   ]
 }

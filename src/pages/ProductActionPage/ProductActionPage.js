@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import callApi from './../../utils/apiCaller'
+import { actAddProductRequest, actGetProductEdittingRequest } from './../../actions/index'
+import { connect } from 'react-redux'
 
 class ProductActionPage extends Component {
     constructor(props) {
@@ -14,18 +16,16 @@ class ProductActionPage extends Component {
     }
 
     componentDidMount() {
-        let { match } = this.props
+        let { match, product } = this.props
         if (match) {
             let id = match.params.id;
-            callApi(`products/${id}`, 'GET', null).then(res => {
-                let data = res.data
-                this.setState({
-                    id: data.id,
-                    txtName: data.name,
-                    txtPrice: data.price,
-                    chkbStatus: data.status
-                })
-            })
+            this.props.onGetEdittingProduct(id)
+            console.log(product);
+            // this.setState({
+            //     txtName: product.name,
+            //     txtPrice: product.price,
+            //     chkbStatus: product.status
+            // })
         }
     }
 
@@ -42,8 +42,13 @@ class ProductActionPage extends Component {
         e.preventDefault()
         let { id, txtName, txtPrice, chkbStatus } = this.state
         let { history } = this.props
-
-        if(id){
+        let product = {
+            id: id,
+            name: txtName,
+            price: txtPrice,
+            status: chkbStatus
+        }
+        if (id) {
             callApi(`products/${id}`, 'PUT', {
                 name: txtName,
                 price: txtPrice,
@@ -51,14 +56,9 @@ class ProductActionPage extends Component {
             }).then(res => {
                 history.goBack()
             })
-        }else{
-            callApi('products', 'POST', {
-                name: txtName,
-                price: txtPrice,
-                status: chkbStatus
-            }).then(res => {
-                history.goBack()
-            })
+        } else {
+            this.props.onAddProduct(product)
+            history.goBack()
         }
     }
 
@@ -87,8 +87,8 @@ class ProductActionPage extends Component {
                     <div className="checkbox">
                         <label>
                             <input type="checkbox" name="chkbStatus"
-                                value={chkbStatus} onChange={this.onChange} 
-                                checked={chkbStatus}/>
+                                value={chkbStatus} onChange={this.onChange}
+                                checked={chkbStatus} />
                             Còn hàng
                         </label>
                     </div>
@@ -101,8 +101,23 @@ class ProductActionPage extends Component {
             </div>
         );
     }
-
-
 }
 
-export default ProductActionPage;
+const mapStateToProp = (state) => {
+    return {
+        product: state.products
+    }
+}
+
+const mapDispatchToProp = (dispatch, props) => {
+    return {
+        onAddProduct: (product) => {
+            dispatch(actAddProductRequest(product))
+        },
+        onGetEdittingProduct: (id) => {
+            dispatch(actGetProductEdittingRequest(id))
+        }
+    }
+}
+
+export default connect(mapStateToProp, mapDispatchToProp)(ProductActionPage);

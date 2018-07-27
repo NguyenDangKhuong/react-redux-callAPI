@@ -4,14 +4,19 @@ let initialState = []
 
 const products = (state = initialState, action) => {
     let index = -1
-    let {id} = action
     switch (action.type) {
         case Types.FETCH_PRODUCTS:
             state = action.products
             return [...state]
         case Types.DELETE_PRODUCT:
-            index = findIndex(state, id)
+            index = findIndex(state, action.id)
             state.splice(index,1)
+            return [...state]
+        case Types.ADD_PRODUCT:
+            state.push(action.product)
+            return [...state]
+        case Types.GET_EDIT_PRODUCT:
+            state.push(action.product)
             return [...state]
         default: return [...state]
     }
