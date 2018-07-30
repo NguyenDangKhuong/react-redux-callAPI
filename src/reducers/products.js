@@ -17,7 +17,8 @@ const products = (state = initialState, action) => {
             return [...state]
         case Types.GET_EDIT_PRODUCT:
             state.push(action.product)
-            return [...state]
+            console.log(action.product)
+            return action.product
         default: return [...state]
     }
 }
