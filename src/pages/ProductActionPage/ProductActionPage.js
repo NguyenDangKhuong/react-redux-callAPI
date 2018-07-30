@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import callApi from './../../utils/apiCaller'
-import { actAddProductRequest, actGetProductEdittingRequest } from './../../actions/index'
+import { actAddProductRequest, actGetProductEdittingRequest, actUpdateProductRequest } from './../../actions/index'
 import { connect } from 'react-redux'
 
 class ProductActionPage extends Component {
@@ -16,18 +15,26 @@ class ProductActionPage extends Component {
     }
 
     componentDidMount() {
-        let { match, product } = this.props
+        let { match, itemEditting } = this.props
         if (match) {
             let id = match.params.id;
             this.props.onGetEdittingProduct(id)
-            console.log(product);
-            // this.setState({
-            //     txtName: product.name,
-            //     txtPrice: product.price,
-            //     chkbStatus: product.status
-            // })
+            console.log(itemEditting)
         }
     }
+
+    //fill data to edit form but no get data so i fail
+    // componentWillReceiveProps(nextProps){
+    //     if(nextProps && nextProps.itemEditting){
+    //         let {itemEditting} = nextProps
+    //         this.setState({
+    //             id = itemEditting.id,
+    //             txtName = itemEditting.name,
+    //             txtPrice = itemEditting.price,
+    //             chkbStatus = itemEditting.status
+    //         })
+    //     }
+    // }
 
     onChange = (e) => {
         let target = e.target
@@ -49,13 +56,7 @@ class ProductActionPage extends Component {
             status: chkbStatus
         }
         if (id) {
-            callApi(`products/${id}`, 'PUT', {
-                name: txtName,
-                price: txtPrice,
-                status: chkbStatus
-            }).then(res => {
-                history.goBack()
-            })
+            this.props.onUpdateProduct(product)
         } else {
             this.props.onAddProduct(product)
             history.goBack()
@@ -105,7 +106,7 @@ class ProductActionPage extends Component {
 
 const mapStateToProp = (state) => {
     return {
-        product: state.products
+        itemEditting: state.itemEditting
     }
 }
 
@@ -116,6 +117,9 @@ const mapDispatchToProp = (dispatch, props) => {
         },
         onGetEdittingProduct: (id) => {
             dispatch(actGetProductEdittingRequest(id))
+        },
+        onUpdateProduct: (product) => {
+            dispatch(actUpdateProductRequest(product))
         }
     }
 }

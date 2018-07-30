@@ -1,12 +1,6 @@
 {
   "products": [
     {
-      "id": 5,
-      "name": "Samsung S9",
-      "price": "820",
-      "status": true
-    },
-    {
       "id": 6,
       "name": "IPhoneX",
       "price": "500",
@@ -19,10 +13,10 @@
       "status": false
     },
     {
-      "id": 8,
-      "name": "Samsung S9",
-      "price": "500",
-      "status": ""
+      "id": 9,
+      "name": "asd",
+      "price": "3424",
+      "status": true
     }
   ]
 }

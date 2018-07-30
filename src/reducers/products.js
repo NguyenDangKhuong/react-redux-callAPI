@@ -4,6 +4,7 @@ let initialState = []
 
 const products = (state = initialState, action) => {
     let index = -1
+    let {product} = action
     switch (action.type) {
         case Types.FETCH_PRODUCTS:
             state = action.products
@@ -15,10 +16,10 @@ const products = (state = initialState, action) => {
         case Types.ADD_PRODUCT:
             state.push(action.product)
             return [...state]
-        case Types.GET_EDIT_PRODUCT:
-            state.push(action.product)
-            console.log(action.product)
-            return action.product
+        case Types.EDIT_PRODUCT:
+            index = findIndex(state, product.id)
+            state[index] = product
+            return [...state]
         default: return [...state]
     }
 }

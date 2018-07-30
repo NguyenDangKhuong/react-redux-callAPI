@@ -1,6 +1,8 @@
 import * as Types from './../constants/ActionsType'
 import callApi from '../utils/apiCaller';
 
+//use redux thunk to request to call API first before handle event to store Redux
+
 export const actFetchProductsRequest = () => {
     return (dispatch) => {
         return callApi('products', 'GET', null).then(res => {
@@ -61,3 +63,19 @@ export const actGetProductEditting = (product) => {
         product
     }
 }
+
+export const actUpdateProductRequest = (product) => {
+    return (dispatch) => {
+        return callApi(`products/${product.id}`, 'PUT', product).then(res=>{
+            dispatch(actUpdateProduct(res.data))
+        })
+    }
+}
+
+export const actUpdateProduct = (product) => {
+    return {
+        type: Types.EDIT_PRODUCT,
+        product
+    }
+} 
+
